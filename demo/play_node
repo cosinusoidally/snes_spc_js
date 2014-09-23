@@ -1,0 +1,2 @@
+node ./spc_node.js &
+aplay -f cd -r 32khz out.pcm

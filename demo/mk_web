@@ -1,0 +1,4 @@
+emcc -O2 -s NO_EXIT_RUNTIME=1 -I..  demo_util.c wave_writer.c play_spc5.c ../snes_spc/*cpp -o spc_snes.js
+mkdir ../web_demo
+cp spc_snes.js spc_snes.js.mem index.html song.js ../web_demo/
+

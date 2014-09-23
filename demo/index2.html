@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+<script type="text/javascript" src="out.js"></script>
+<script type="text/javascript" src="song.js"></script>
+<script>
+go=function(){
+context = new AudioContext();
+spc=allocate(song, 'i8', ALLOC_STACK);
+_my_init(spc,song.length);
+frame_size=16384;
+
+
+frame_size=16384;
+in_rate=32000;
+out_rate=context.sampleRate;
+initial_offset=0;
+ratio=in_rate/out_rate;
+final_offset=frame_size*ratio;
+last_sample=1+Math.floor(final_offset);
+chan=0;
+sample=function(x){
+  offset=initial_offset+ratio*x;
+  buffer_offset=Math.floor(offset);
+  if(buffer_offset+1>last_sample){throw "error";};
+  high=offset-buffer_offset;
+  low=1-high;
+  low_val=HEAP16[chan+buf/2+(buffer_offset)*2]*low;
+  high_val=HEAP16[chan+buf/2+(buffer_offset+1)*2]*high;
+  return(low_val+high_val);
+
+}
+
+
+
+buf_size=4*(last_sample-1);
+buf=allocate(new Uint8Array(buf_size+4), 'i8', ALLOC_STACK);
+
+audioNode = context.createScriptProcessor(frame_size, 0, 2);
+
+
+audioNode.onaudioprocess = function(audioProcessingEvent) {
+_my_decode(buf,last_sample*2);
+for(zz=0;zz<last_sample;zz++){
+HEAP16[buf/2+zz*2+1]=0;
+}
+outputBuffer = audioProcessingEvent.outputBuffer;
+for (var chan = 0; chan < outputBuffer.numberOfChannels; chan++) {
+out_data=outputBuffer.getChannelData(chan);
+for(var k=0;k<out_data.length;k++){
+//if(chan===1){
+out_data[k]=sample(k)/32000;
+//}
+}
+
+}
+
+}
+audioNode.connect(context.destination);
+}
+</script>
+
+</head>
+<body>
+<body onload="go();">
+Snes player
+</body>
+</html>

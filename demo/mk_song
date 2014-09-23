@@ -1,0 +1,2 @@
+fs=require("fs");
+console.log("song="+JSON.stringify(fs.readFileSync("test.spc")));

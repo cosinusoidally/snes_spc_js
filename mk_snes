@@ -1,0 +1,1 @@
+ g++ -I.. demo_util.c wave_writer.c play_spc.c ../snes_spc/*cpp 

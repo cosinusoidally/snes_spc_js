@@ -1,0 +1,7 @@
+emcc -O2 -s NO_EXIT_RUNTIME=1 -I..  demo_util.c wave_writer.c play_spc4.c ../snes_spc/*cpp
+mkdir ../node_demo
+cat a.out.js my3.js > ../node_demo/spc_node.js
+cp a.out.js.mem ../node_demo/
+cp -r files/ ../node_demo/
+cp play_node ../node_demo
+mkfifo ../node_demo/out.pcm
